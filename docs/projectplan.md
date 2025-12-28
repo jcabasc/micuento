@@ -45,14 +45,14 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Write database migration scripts (using db:push for Supabase)
 
 ### Checkpoint 3: Story Management (Admin)
-- [ ] Create admin authentication (simple password protection initially)
-- [ ] Build admin dashboard layout
-- [ ] Create story listing page (admin)
-- [ ] Build story creation form (title, description, cover upload)
-- [ ] Build story page editor (upload illustration templates, add text templates)
-- [ ] Implement image upload to cloud storage
-- [ ] Create story preview functionality
-- [ ] Add story publish/unpublish toggle
+- [x] Create admin authentication (simple password protection initially)
+- [x] Build admin dashboard layout
+- [x] Create story listing page (admin)
+- [x] Build story creation form (title, description, cover upload)
+- [x] Build story page editor (upload illustration templates, add text templates)
+- [x] Implement image upload to cloud storage (URL-based for now)
+- [x] Create story preview functionality
+- [x] Add story publish/unpublish toggle
 
 ### Checkpoint 4: Public Storefront
 - [ ] Design and build landing page
@@ -311,7 +311,7 @@ Score = (Reach × Impact × Confidence) / Effort
 |------------|--------|-------|
 | 1. Project Setup | Completed | Next.js 14, Tailwind, Shadcn, Supabase client |
 | 2. Database Schema | Completed | Prisma 6.x, 4 tables, seed script |
-| 3. Story Management | Not Started | |
+| 3. Story Management | Completed | Admin auth, CRUD stories & pages |
 | 4. Public Storefront | Not Started | |
 | 5. Personalization Flow | Not Started | |
 | 6. Face-Swap Integration | Not Started | Segmind v3/v4 |
