@@ -25,24 +25,24 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 ## Checkpoints & Tasks
 
 ### Checkpoint 1: Project Setup & Foundation
-- [ ] Initialize Next.js 14 project with TypeScript
-- [ ] Configure TailwindCSS and design tokens
-- [ ] Set up ESLint and Prettier
-- [ ] Configure environment variables structure
-- [ ] Set up Git repository
-- [ ] Create basic folder structure (components, lib, app routes)
-- [ ] Install and configure Shadcn/UI components
-- [ ] Set up Supabase project and database connection
-- [ ] Create initial database schema design document
+- [x] Initialize Next.js 14 project with TypeScript
+- [x] Configure TailwindCSS and design tokens
+- [x] Set up ESLint and Prettier
+- [x] Configure environment variables structure
+- [x] Set up Git repository
+- [x] Create basic folder structure (components, lib, app routes)
+- [x] Install and configure Shadcn/UI components
+- [x] Set up Supabase project and database connection
+- [x] Create initial database schema design document
 
 ### Checkpoint 2: Database Schema & Models
-- [ ] Design and create `stories` table (id, title, slug, description, cover_image, page_count, price, status)
-- [ ] Design and create `story_pages` table (id, story_id, page_number, image_template, text_template)
-- [ ] Design and create `orders` table (id, user_email, story_id, child_name, child_age, child_photo_url, status, stripe_session_id)
-- [ ] Design and create `generated_books` table (id, order_id, pdf_url, preview_images)
-- [ ] Set up Prisma ORM
-- [ ] Create seed data script for test stories
-- [ ] Write database migration scripts
+- [x] Design and create `stories` table (id, title, slug, description, cover_image, page_count, price, status)
+- [x] Design and create `story_pages` table (id, story_id, page_number, image_template, text_template)
+- [x] Design and create `orders` table (id, user_email, story_id, child_name, child_age, child_photo_url, status, wompi_transaction_id)
+- [x] Design and create `generated_books` table (id, order_id, pdf_url, preview_images)
+- [x] Set up Prisma ORM
+- [x] Create seed data script for test stories
+- [x] Write database migration scripts (using db:push for Supabase)
 
 ### Checkpoint 3: Story Management (Admin)
 - [ ] Create admin authentication (simple password protection initially)
@@ -309,8 +309,8 @@ Score = (Reach × Impact × Confidence) / Effort
 
 | Checkpoint | Status | Notes |
 |------------|--------|-------|
-| 1. Project Setup | Not Started | |
-| 2. Database Schema | Not Started | |
+| 1. Project Setup | Completed | Next.js 14, Tailwind, Shadcn, Supabase client |
+| 2. Database Schema | Completed | Prisma 6.x, 4 tables, seed script |
 | 3. Story Management | Not Started | |
 | 4. Public Storefront | Not Started | |
 | 5. Personalization Flow | Not Started | |
