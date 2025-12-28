@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Story {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  coverImage  String   @map("cover_image")
+  pageCount   Int      @map("page_count")
+  price       Int      // Price in cents (COP)
+  status      StoryStatus @default(DRAFT)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  pages  StoryPage[]
+  orders Order[]
+
+  @@map("stories")
+}
+
+model StoryPage {
+  id            String @id @default(cuid())
+  storyId       String @map("story_id")
+  pageNumber    Int    @map("page_number")
+  imageTemplate String @map("image_template") // URL to template image with placeholder face
+  textTemplate  String @map("text_template")  // Text with {child_name} placeholder
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@unique([storyId, pageNumber])
+  @@map("story_pages")
+}
+
+model Order {
+  id                  String        @id @default(cuid())
+  userEmail           String        @map("user_email")
+  storyId             String        @map("story_id")
+  childName           String        @map("child_name")
+  childAge            Int           @map("child_age")
+  childPhotoUrl       String        @map("child_photo_url")
+  status              OrderStatus   @default(PENDING)
+  paymentStatus       PaymentStatus @default(PENDING) @map("payment_status")
+  wompiTransactionId  String?       @map("wompi_transaction_id")
+  wompiReference      String?       @unique @map("wompi_reference")
+  totalAmount         Int           @map("total_amount") // Amount in cents (COP)
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+
+  story         Story          @relation(fields: [storyId], references: [id])
+  generatedBook GeneratedBook?
+
+  @@map("orders")
+}
+
+model GeneratedBook {
+  id            String   @id @default(cuid())
+  orderId       String   @unique @map("order_id")
+  pdfUrl        String?  @map("pdf_url")
+  previewImages String[] @map("preview_images")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("generated_books")
+}
+
+enum StoryStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  VOIDED
+  ERROR
+}
