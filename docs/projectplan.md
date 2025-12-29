@@ -108,9 +108,9 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Handle successful payment flow (APPROVED status)
 - [x] Handle failed/pending payment flows (DECLINED, VOIDED, ERROR)
 - [x] Create order confirmation page
-- [ ] Send order confirmation email (Resend or similar)
-- [ ] Implement PSE bank transfer flow
-- [ ] Implement Nequi payment flow
+- [x] Send order confirmation email (Resend or similar)
+- [x] Implement PSE bank transfer flow
+- [x] Implement Nequi payment flow
 - [ ] Add cash payment option (Corresponsal Bancolombia) - optional
 
 ### Checkpoint 9: Order Management & Delivery

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { processStoryPages, formatErrorsForStorage } from "@/services/face-swap-processor";
+import { sendOrderReadyEmail } from "@/services/email";
+import { env } from "@/lib/env";
 
 export async function POST(
   request: NextRequest,
@@ -100,6 +102,17 @@ export async function POST(
         status: result.success ? "COMPLETED" : "FAILED",
       },
     });
+
+    // Send order ready email if successful
+    if (result.success) {
+      await sendOrderReadyEmail({
+        to: order.userEmail,
+        childName: order.childName,
+        storyTitle: order.story.title,
+        orderId: order.id,
+        downloadUrl: `${env.appUrl}/orders/${order.id}/status`,
+      });
+    }
 
     return NextResponse.json({
       success: result.success,
