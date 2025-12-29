@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils";
+import { ProcessButton } from "./process-button";
 
 export default async function OrdersPage() {
   const orders = await prisma.order.findMany({
@@ -47,7 +48,7 @@ export default async function OrdersPage() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <div className="space-y-1">
                     <p className="text-muted-foreground">{order.userEmail}</p>
@@ -57,6 +58,7 @@ export default async function OrdersPage() {
                   </div>
                   <p className="font-medium">{formatPrice(order.totalAmount)}</p>
                 </div>
+                <ProcessButton orderId={order.id} orderStatus={order.status} />
               </CardContent>
             </Card>
           ))}
