@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils";
 import { ProcessButton } from "./process-button";
+
+export const dynamic = "force-dynamic";
 
 export default async function OrdersPage() {
   const orders = await prisma.order.findMany({
@@ -31,17 +34,17 @@ export default async function OrdersPage() {
       ) : (
         <div className="grid gap-4">
           {orders.map((order) => (
-            <Card key={order.id}>
+            <Card key={order.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
-                  <div>
+                  <Link href={`/admin/orders/${order.id}`} className="hover:underline">
                     <CardTitle className="text-lg">
                       {order.childName} ({order.childAge} años)
                     </CardTitle>
                     <p className="text-sm text-muted-foreground">
                       {order.story.title}
                     </p>
-                  </div>
+                  </Link>
                   <div className="flex gap-2">
                     <StatusBadge status={order.status} />
                     <PaymentBadge status={order.paymentStatus} />
