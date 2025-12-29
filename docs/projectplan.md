@@ -65,15 +65,15 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Add footer with legal links
 
 ### Checkpoint 5: Personalization Flow
-- [ ] Build personalization wizard/stepper component
-- [ ] Create child name input with validation
-- [ ] Create child age selector
-- [ ] Build photo upload component with guidelines
-- [ ] Implement client-side image validation (face detection check)
-- [ ] Create photo cropping/adjustment tool
-- [ ] Build preview of personalized cover
-- [ ] Store personalization data in session/state
-- [ ] Create order summary component
+- [x] Build personalization wizard/stepper component
+- [x] Create child name input with validation
+- [x] Create child age selector
+- [x] Build photo upload component with guidelines
+- [x] Implement client-side image validation (file type/size)
+- [x] Create photo preview (cropping deferred to future)
+- [x] Build preview of personalized order
+- [x] Store personalization data in React state
+- [x] Create order summary component
 
 ### Checkpoint 6: Face-Swap Integration (Segmind)
 - [ ] Set up Segmind API account and get API keys
@@ -313,7 +313,7 @@ Score = (Reach × Impact × Confidence) / Effort
 | 2. Database Schema | Completed | Prisma 6.x, 4 tables, seed script |
 | 3. Story Management | Completed | Admin auth, CRUD stories & pages |
 | 4. Public Storefront | Completed | Landing, catalog, detail, navbar, footer, FAQ |
-| 5. Personalization Flow | Not Started | |
+| 5. Personalization Flow | Completed | Wizard, name/age, photo upload, preview |
 | 6. Face-Swap Integration | Not Started | Segmind v3/v4 |
 | 7. PDF Generation | Not Started | |
 | 8. Payment Integration | Not Started | |
