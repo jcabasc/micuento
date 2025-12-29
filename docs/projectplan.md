@@ -85,7 +85,7 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Implement error handling for failed swaps
 - [x] Build retry mechanism for failures
 - [ ] Test with various photo types and edge cases
-- [ ] Set up Replicate as fallback option
+- [x] Set up Replicate as fallback option
 
 ### Checkpoint 7: PDF Generation
 - [ ] Design PDF layout templates matching story pages

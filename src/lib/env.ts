@@ -7,6 +7,9 @@ export const env = {
   // Segmind
   segmindApiKey: process.env.SEGMIND_API_KEY!,
 
+  // Replicate (fallback)
+  replicateApiKey: process.env.REPLICATE_API_KEY || "",
+
   // Wompi
   wompiPublicKey: process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY!,
   wompiPrivateKey: process.env.WOMPI_PRIVATE_KEY!,

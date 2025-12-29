@@ -1,6 +1,8 @@
 import { faceSwapV4 } from "./segmind";
+import { replicateFaceSwap, isReplicateConfigured, downloadImageAsBase64 } from "./replicate";
 import {
   FaceSwapError,
+  FaceSwapErrorCode,
   parseSegmindError,
   isRetryableError,
   getRetryDelay,
@@ -57,7 +59,7 @@ async function imageUrlToBase64(url: string): Promise<string> {
 }
 
 /**
- * Process a single story page with face-swap (with retry logic)
+ * Process a single story page with face-swap (with retry logic and fallback)
  */
 async function processPage(
   page: StoryPage,
@@ -67,6 +69,7 @@ async function processPage(
   const startTime = Date.now();
   let lastError: FaceSwapError | null = null;
 
+  // Try Segmind first
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       // Convert template image URL to base64 if it's a URL
@@ -101,6 +104,40 @@ async function processPage(
       // Wait before retrying
       const delay = getRetryDelay(lastError, attempt);
       await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  // Try Replicate as fallback if configured and Segmind failed with certain errors
+  if (isReplicateConfigured() && lastError) {
+    const fallbackErrors = [
+      FaceSwapErrorCode.API_RATE_LIMIT,
+      FaceSwapErrorCode.API_QUOTA_EXCEEDED,
+      FaceSwapErrorCode.API_SERVER_ERROR,
+      FaceSwapErrorCode.API_TIMEOUT,
+    ];
+
+    if (fallbackErrors.includes(lastError.code)) {
+      try {
+        console.log(`Page ${page.pageNumber}: Segmind failed, trying Replicate fallback`);
+
+        const result = await replicateFaceSwap({
+          sourceImage: childPhotoBase64,
+          targetImage: page.imageTemplate,
+        });
+
+        // Download the result image and convert to base64
+        const imageBase64 = await downloadImageAsBase64(result.image);
+
+        return {
+          pageNumber: page.pageNumber,
+          success: true,
+          processedImage: imageBase64,
+          processingTime: Date.now() - startTime,
+        };
+      } catch (replicateError) {
+        console.error(`Page ${page.pageNumber}: Replicate fallback also failed`, replicateError);
+        // Keep the original Segmind error
+      }
     }
   }
 
