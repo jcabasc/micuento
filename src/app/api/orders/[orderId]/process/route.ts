@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { processStoryPages } from "@/services/face-swap-processor";
+import { processStoryPages, formatErrorsForStorage } from "@/services/face-swap-processor";
 
 export async function POST(
   request: NextRequest,
@@ -71,15 +71,25 @@ export async function POST(
       .filter((r) => r.success && r.processedImage)
       .map((r) => r.processedImage as string);
 
-    // Create or update generated book
+    // Format errors for storage
+    const processingErrors = formatErrorsForStorage(result.errors);
+    const lastError = result.errors.length > 0
+      ? result.errors[result.errors.length - 1].userMessage
+      : null;
+
+    // Create or update generated book with error tracking
     await prisma.generatedBook.upsert({
       where: { orderId },
       create: {
         orderId,
         previewImages,
+        processingErrors: processingErrors.length > 0 ? processingErrors : undefined,
+        lastError,
       },
       update: {
         previewImages,
+        processingErrors: processingErrors.length > 0 ? processingErrors : undefined,
+        lastError,
       },
     });
 
@@ -98,12 +108,11 @@ export async function POST(
       processedPages: result.processedPages,
       failedPages: result.failedPages,
       processingTime: result.totalProcessingTime,
-      errors: result.results
-        .filter((r) => !r.success)
-        .map((r) => ({
-          pageNumber: r.pageNumber,
-          error: r.error,
-        })),
+      errors: result.errors.map((e) => ({
+        pageNumber: e.pageNumber,
+        code: e.code,
+        message: e.userMessage,
+      })),
     });
   } catch (error) {
     console.error("Order processing error:", error);

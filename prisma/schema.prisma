@@ -65,7 +65,11 @@ model GeneratedBook {
   orderId       String   @unique @map("order_id")
   pdfUrl        String?  @map("pdf_url")
   previewImages String[] @map("preview_images")
+  processingErrors Json?  @map("processing_errors") // Array of {pageNumber, error, timestamp}
+  retryCount    Int      @default(0) @map("retry_count")
+  lastError     String?  @map("last_error")
   createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 

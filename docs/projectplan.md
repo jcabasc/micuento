@@ -82,8 +82,8 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Implement face detection validation before processing
 - [x] Build face-swap processing for each story page
 - [x] Create progress indicator for processing
-- [ ] Implement error handling for failed swaps
-- [ ] Build retry mechanism for failures
+- [x] Implement error handling for failed swaps
+- [x] Build retry mechanism for failures
 - [ ] Test with various photo types and edge cases
 - [ ] Set up Replicate as fallback option
 
