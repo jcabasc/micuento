@@ -46,13 +46,28 @@ export function PreviewStep({ story, data, onBack }: Props) {
       return;
     }
 
+    if (!data.photoPreview) {
+      setError("No se encontró la foto. Por favor vuelve al paso anterior.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
-      // For now, redirect to a thank you page or payment page
-      // In the future, this will integrate with Wompi
-      router.push(`/stories/${story.slug}/personalize/checkout?email=${encodeURIComponent(email)}`);
+      // Store photo in sessionStorage for checkout page
+      const photoBase64 = data.photoPreview.split(",")[1]; // Remove data URL prefix
+      sessionStorage.setItem("childPhotoBase64", photoBase64);
+
+      // Redirect to checkout with order data
+      const params = new URLSearchParams({
+        storyId: story.id,
+        childName: data.childName,
+        childAge: data.childAge.toString(),
+        email: email,
+      });
+
+      router.push(`/checkout?${params.toString()}`);
     } catch {
       setError("Error al procesar. Por favor intenta de nuevo.");
     } finally {

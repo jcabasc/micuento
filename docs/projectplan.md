@@ -100,14 +100,14 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [ ] Upload generated PDFs to cloud storage
 
 ### Checkpoint 8: Payment Integration (Wompi)
-- [ ] Create Wompi business account and get API keys (public + private)
-- [ ] Set up Wompi sandbox environment for testing
-- [ ] Create payment widget integration (cards, PSE, Nequi)
-- [ ] Build cart/checkout page with payment method selection
-- [ ] Implement Wompi webhook handler for transaction events
-- [ ] Handle successful payment flow (APPROVED status)
-- [ ] Handle failed/pending payment flows (DECLINED, VOIDED, ERROR)
-- [ ] Create order confirmation page
+- [x] Create Wompi business account and get API keys (public + private)
+- [x] Set up Wompi sandbox environment for testing
+- [x] Create payment widget integration (cards, PSE, Nequi)
+- [x] Build cart/checkout page with payment method selection
+- [x] Implement Wompi webhook handler for transaction events
+- [x] Handle successful payment flow (APPROVED status)
+- [x] Handle failed/pending payment flows (DECLINED, VOIDED, ERROR)
+- [x] Create order confirmation page
 - [ ] Send order confirmation email (Resend or similar)
 - [ ] Implement PSE bank transfer flow
 - [ ] Implement Nequi payment flow
