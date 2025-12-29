@@ -55,14 +55,14 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Add story publish/unpublish toggle
 
 ### Checkpoint 4: Public Storefront
-- [ ] Design and build landing page
-- [ ] Create story catalog/browse page
-- [ ] Build individual story detail page
-- [ ] Implement story preview carousel
-- [ ] Add "How It Works" section
-- [ ] Create FAQ section
-- [ ] Build responsive navigation
-- [ ] Add footer with legal links
+- [x] Design and build landing page
+- [x] Create story catalog/browse page
+- [x] Build individual story detail page
+- [x] Implement story preview carousel
+- [x] Add "How It Works" section
+- [x] Create FAQ section
+- [x] Build responsive navigation
+- [x] Add footer with legal links
 
 ### Checkpoint 5: Personalization Flow
 - [ ] Build personalization wizard/stepper component
@@ -312,7 +312,7 @@ Score = (Reach × Impact × Confidence) / Effort
 | 1. Project Setup | Completed | Next.js 14, Tailwind, Shadcn, Supabase client |
 | 2. Database Schema | Completed | Prisma 6.x, 4 tables, seed script |
 | 3. Story Management | Completed | Admin auth, CRUD stories & pages |
-| 4. Public Storefront | Not Started | |
+| 4. Public Storefront | Completed | Landing, catalog, detail, navbar, footer, FAQ |
 | 5. Personalization Flow | Not Started | |
 | 6. Face-Swap Integration | Not Started | Segmind v3/v4 |
 | 7. PDF Generation | Not Started | |
