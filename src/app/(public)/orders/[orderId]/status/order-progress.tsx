@@ -152,13 +152,29 @@ export function OrderProgress({
         {/* Completed Actions */}
         {status.status === "COMPLETED" && (
           <div className="space-y-3">
-            {status.pdfUrl && (
-              <Button className="w-full" asChild>
-                <a href={status.pdfUrl} download>
-                  Descargar PDF
-                </a>
-              </Button>
-            )}
+            <Button
+              className="w-full"
+              onClick={async () => {
+                try {
+                  const response = await fetch(`/api/orders/${orderId}/generate-pdf`, {
+                    method: "POST",
+                  });
+                  if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `mi-cuento-${orderId}.pdf`;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                  }
+                } catch (err) {
+                  console.error("Download failed:", err);
+                }
+              }}
+            >
+              Descargar PDF
+            </Button>
             <Button variant="outline" className="w-full" asChild>
               <Link href="/">Crear otro cuento</Link>
             </Button>

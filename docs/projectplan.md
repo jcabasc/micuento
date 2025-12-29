@@ -88,15 +88,15 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Set up Replicate as fallback option
 
 ### Checkpoint 7: PDF Generation
-- [ ] Design PDF layout templates matching story pages
-- [ ] Set up Puppeteer or react-pdf
-- [ ] Create PDF generation service
-- [ ] Implement text personalization (name injection using {child_name} tokens)
-- [ ] Integrate face-swapped images into PDF pages
-- [ ] Add cover page generation
-- [ ] Add back cover generation
+- [x] Design PDF layout templates matching story pages
+- [x] Set up Puppeteer or react-pdf
+- [x] Create PDF generation service
+- [x] Implement text personalization (name injection using {child_name} tokens)
+- [x] Integrate face-swapped images into PDF pages
+- [x] Add cover page generation
+- [x] Add back cover generation
 - [ ] Create PDF preview (low-res watermarked) for user approval
-- [ ] Implement high-res PDF generation for print/download
+- [x] Implement high-res PDF generation for print/download
 - [ ] Upload generated PDFs to cloud storage
 
 ### Checkpoint 8: Payment Integration (Wompi)
