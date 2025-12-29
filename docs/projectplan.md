@@ -77,7 +77,8 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 
 ### Checkpoint 6: Face-Swap Integration (Segmind)
 - [ ] Set up Segmind API account and get API keys
-- [ ] Create API wrapper for Segmind face-swap v3/v4
+- [ ] Create API wrappers for Segmind face-swap v3 AND v4
+- [ ] Create admin test page to compare v3 vs v4 results
 - [ ] Implement face detection validation before processing
 - [ ] Build face-swap processing for each story page
 - [ ] Create progress indicator for processing
