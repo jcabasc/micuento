@@ -76,9 +76,9 @@ A WONDERWRAPS-style platform that creates hyper-personalized storybooks featurin
 - [x] Create order summary component
 
 ### Checkpoint 6: Face-Swap Integration (Segmind)
-- [ ] Set up Segmind API account and get API keys
-- [ ] Create API wrappers for Segmind face-swap v3 AND v4
-- [ ] Create admin test page to compare v3 vs v4 results
+- [x] Set up Segmind API account and get API keys
+- [x] Create API wrappers for Segmind face-swap v3 AND v4
+- [x] Create admin test page to compare v3 vs v4 results
 - [ ] Implement face detection validation before processing
 - [ ] Build face-swap processing for each story page
 - [ ] Create progress indicator for processing
@@ -315,7 +315,7 @@ Score = (Reach × Impact × Confidence) / Effort
 | 3. Story Management | Completed | Admin auth, CRUD stories & pages |
 | 4. Public Storefront | Completed | Landing, catalog, detail, navbar, footer, FAQ |
 | 5. Personalization Flow | Completed | Wizard, name/age, photo upload, preview |
-| 6. Face-Swap Integration | Not Started | Segmind v3/v4 |
+| 6. Face-Swap Integration | In Progress | Segmind v3/v4 wrappers done, admin test page done |
 | 7. PDF Generation | Not Started | |
 | 8. Payment Integration | Not Started | |
 | 9. Order Management | Not Started | |

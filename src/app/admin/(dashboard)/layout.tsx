@@ -39,6 +39,11 @@ export default async function DashboardLayout({
                   Pedidos
                 </Button>
               </Link>
+              <Link href="/admin/faceswap-test">
+                <Button variant="ghost" size="sm">
+                  Face-Swap Test
+                </Button>
+              </Link>
             </nav>
           </div>
           <LogoutButton />
