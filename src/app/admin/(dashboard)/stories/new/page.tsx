@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ImageUpload } from "@/components/admin/image-upload";
 import { createStory } from "../actions";
 
 export default function NewStoryPage() {
@@ -83,17 +84,11 @@ export default function NewStoryPage() {
               </p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="coverImage">URL de la Portada</Label>
-              <Input
-                id="coverImage"
-                name="coverImage"
-                placeholder="/stories/mi-historia/cover.jpg"
-              />
-              <p className="text-xs text-muted-foreground">
-                Opcional. Puedes agregar la imagen después.
-              </p>
-            </div>
+            <ImageUpload
+              label="Portada del Cuento"
+              name="coverImage"
+              folder="covers"
+            />
 
             {error && <p className="text-sm text-destructive">{error}</p>}
 

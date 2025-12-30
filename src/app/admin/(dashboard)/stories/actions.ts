@@ -44,7 +44,7 @@ export async function createStory(formData: FormData): Promise<{ id: string }> {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const price = parseInt(formData.get("price") as string, 10) * 100; // Convert to cents
-  const coverImage = (formData.get("coverImage") as string) || "/placeholder-cover.jpg";
+  const coverImage = (formData.get("coverImage") as string) || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&h=600&fit=crop";
 
   const slug = generateSlug(title);
 
