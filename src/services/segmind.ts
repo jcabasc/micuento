@@ -71,11 +71,15 @@ export async function faceSwapV3(
     throw new Error(`Segmind V3 failed: ${response.status} - ${error}`);
   }
 
-  const data = await response.json();
+  // Segmind returns the image as binary data
+  const arrayBuffer = await response.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  const base64Image = buffer.toString("base64");
+
   const processingTime = Date.now() - startTime;
 
   return {
-    image: data.image,
+    image: base64Image,
     version: "v3",
     processingTime,
   };
@@ -111,11 +115,15 @@ export async function faceSwapV4(
     throw new Error(`Segmind V4 failed: ${response.status} - ${error}`);
   }
 
-  const data = await response.json();
+  // Segmind returns the image as binary data
+  const arrayBuffer = await response.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  const base64Image = buffer.toString("base64");
+
   const processingTime = Date.now() - startTime;
 
   return {
-    image: data.image,
+    image: base64Image,
     version: "v4",
     processingTime,
   };
