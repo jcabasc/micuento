@@ -73,7 +73,7 @@ export default function FaceSwapTestPage() {
     setError(null);
   }
 
-  async function runComparison() {
+  async function runTest(version: "v3" | "v4" | "both") {
     if (!sourceBase64 || !targetBase64) {
       setError("Please upload both images");
       return;
@@ -90,7 +90,7 @@ export default function FaceSwapTestPage() {
         body: JSON.stringify({
           sourceImage: sourceBase64,
           targetImage: targetBase64,
-          version: "both",
+          version,
         }),
       });
 
@@ -100,12 +100,33 @@ export default function FaceSwapTestPage() {
       }
 
       const data = await response.json();
-      setResults(data);
+
+      // Handle single version response
+      if (version === "v3" || version === "v4") {
+        setResults({
+          v3: version === "v3" ? data : { error: "Not tested" },
+          v4: version === "v4" ? data : { error: "Not tested" },
+        });
+      } else {
+        setResults(data);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
+  }
+
+  function runComparison() {
+    runTest("both");
+  }
+
+  function runV3Only() {
+    runTest("v3");
+  }
+
+  function runV4Only() {
+    runTest("v4");
   }
 
   function resetAll() {
@@ -200,16 +221,31 @@ export default function FaceSwapTestPage() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-4">
-        <Button
-          onClick={runComparison}
-          disabled={!sourceBase64 || !targetBase64 || loading}
-          className="flex-1"
-        >
-          {loading ? "Processing..." : "Run Comparison"}
-        </Button>
-        <Button variant="outline" onClick={resetAll}>
-          Reset
+      <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <Button
+            onClick={runV3Only}
+            disabled={!sourceBase64 || !targetBase64 || loading}
+            variant="outline"
+          >
+            {loading ? "Processing..." : "Test V3 Only"}
+          </Button>
+          <Button
+            onClick={runV4Only}
+            disabled={!sourceBase64 || !targetBase64 || loading}
+            variant="outline"
+          >
+            {loading ? "Processing..." : "Test V4 Only"}
+          </Button>
+          <Button
+            onClick={runComparison}
+            disabled={!sourceBase64 || !targetBase64 || loading}
+          >
+            {loading ? "Processing..." : "Compare Both"}
+          </Button>
+        </div>
+        <Button variant="outline" onClick={resetAll} className="w-full">
+          Reset All
         </Button>
       </div>
 
@@ -225,64 +261,68 @@ export default function FaceSwapTestPage() {
           <h2 className="text-xl font-semibold">Results</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* V3 Result */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center justify-between">
-                  <span>V3 Result</span>
-                  {!isError(results.v3) && results.v3.processingTime && (
-                    <span className="text-sm font-normal text-muted-foreground">
-                      {(results.v3.processingTime / 1000).toFixed(2)}s
-                    </span>
+            {!isError(results.v3) || results.v3.error !== "Not tested" ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center justify-between">
+                    <span>V3 Result</span>
+                    {!isError(results.v3) && results.v3.processingTime && (
+                      <span className="text-sm font-normal text-muted-foreground">
+                        {(results.v3.processingTime / 1000).toFixed(2)}s
+                      </span>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {isError(results.v3) ? (
+                    <div className="p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
+                      {results.v3.error}
+                    </div>
+                  ) : (
+                    <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-muted">
+                      <Image
+                        src={`data:image/jpeg;base64,${results.v3.image}`}
+                        alt="V3 result"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
                   )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {isError(results.v3) ? (
-                  <div className="p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
-                    {results.v3.error}
-                  </div>
-                ) : (
-                  <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-muted">
-                    <Image
-                      src={`data:image/jpeg;base64,${results.v3.image}`}
-                      alt="V3 result"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : null}
 
             {/* V4 Result */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center justify-between">
-                  <span>V4 Result</span>
-                  {!isError(results.v4) && results.v4.processingTime && (
-                    <span className="text-sm font-normal text-muted-foreground">
-                      {(results.v4.processingTime / 1000).toFixed(2)}s
-                    </span>
+            {!isError(results.v4) || results.v4.error !== "Not tested" ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center justify-between">
+                    <span>V4 Result</span>
+                    {!isError(results.v4) && results.v4.processingTime && (
+                      <span className="text-sm font-normal text-muted-foreground">
+                        {(results.v4.processingTime / 1000).toFixed(2)}s
+                      </span>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {isError(results.v4) ? (
+                    <div className="p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
+                      {results.v4.error}
+                    </div>
+                  ) : (
+                    <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-muted">
+                      <Image
+                        src={`data:image/jpeg;base64,${results.v4.image}`}
+                        alt="V4 result"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
                   )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {isError(results.v4) ? (
-                  <div className="p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
-                    {results.v4.error}
-                  </div>
-                ) : (
-                  <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-muted">
-                    <Image
-                      src={`data:image/jpeg;base64,${results.v4.image}`}
-                      alt="V4 result"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : null}
           </div>
 
           {/* Comparison Notes */}
