@@ -154,26 +154,33 @@ export async function faceSwapComic(
 ): Promise<FaceSwapResult> {
   const startTime = Date.now();
 
+  // Build request body, only include mask_image if provided
+  const requestBody: Record<string, unknown> = {
+    source_image: options.sourceImage,
+    target_image: options.targetImage,
+    prompt: options.prompt ?? "",
+    seed: options.seed ?? 63255,
+    face_strength: options.faceStrength ?? 0.8,
+    style_strength: options.styleStrength ?? 0.8,
+    steps: options.steps ?? 10,
+    cfg: options.cfg ?? 1.6,
+    output_format: options.outputFormat ?? "jpeg",
+    output_quality: options.outputQuality ?? 95,
+    base64: false,
+  };
+
+  // Only include mask_image if it's actually provided
+  if (options.maskImage && options.maskImage.trim() !== "") {
+    requestBody.mask_image = options.maskImage;
+  }
+
   const response = await fetch(SEGMIND_COMIC_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "x-api-key": env.segmindApiKey,
     },
-    body: JSON.stringify({
-      source_image: options.sourceImage,
-      target_image: options.targetImage,
-      prompt: options.prompt ?? "",
-      seed: options.seed ?? 63255,
-      mask_image: options.maskImage ?? "",
-      face_strength: options.faceStrength ?? 0.8,
-      style_strength: options.styleStrength ?? 0.8,
-      steps: options.steps ?? 10,
-      cfg: options.cfg ?? 1.6,
-      output_format: options.outputFormat ?? "jpeg",
-      output_quality: options.outputQuality ?? 95,
-      base64: false, // We'll handle binary response
-    }),
+    body: JSON.stringify(requestBody),
   });
 
   if (!response.ok) {
@@ -230,7 +237,7 @@ export interface ConsistentCharacterOptions {
   prompt: string; // Scene description
   negativePrompt?: string; // What to avoid
   seed?: number;
-  outputFormat?: "webp" | "jpeg" | "png";
+  outputFormat?: "webp" | "jpg" | "png";
   outputQuality?: number; // 1-100
   randomisePoses?: boolean;
   numberOfOutputs?: number;
@@ -249,6 +256,12 @@ export async function generateConsistentCharacter(
 ): Promise<ConsistentCharacterResult> {
   const startTime = Date.now();
 
+  // Convert base64 to data URI if not already a URL
+  let subjectUri = options.subject;
+  if (!options.subject.startsWith("http") && !options.subject.startsWith("data:")) {
+    subjectUri = `data:image/jpeg;base64,${options.subject}`;
+  }
+
   const response = await fetch(SEGMIND_CONSISTENT_CHARACTER_URL, {
     method: "POST",
     headers: {
@@ -256,11 +269,11 @@ export async function generateConsistentCharacter(
       "x-api-key": env.segmindApiKey,
     },
     body: JSON.stringify({
-      subject: options.subject,
+      subject: subjectUri,
       prompt: options.prompt,
       negative_prompt: options.negativePrompt ?? "blurry, low quality, distorted face, multiple people",
       seed: options.seed,
-      output_format: options.outputFormat ?? "jpeg",
+      output_format: options.outputFormat ?? "jpg",
       output_quality: options.outputQuality ?? 90,
       randomise_poses: options.randomisePoses ?? false,
       number_of_outputs: options.numberOfOutputs ?? 1,

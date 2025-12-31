@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
     const {
       sourceImage,
       targetImage,
+      maskImage,
       prompt,
       faceStrength,
       styleStrength,
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
     const result = await faceSwapComic({
       sourceImage,
       targetImage,
+      maskImage,
       prompt,
       faceStrength,
       styleStrength,

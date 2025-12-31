@@ -16,8 +16,10 @@ interface ComicResult {
 export default function FaceSwapComicTestPage() {
   const [sourcePreview, setSourcePreview] = useState<string | null>(null);
   const [targetPreview, setTargetPreview] = useState<string | null>(null);
+  const [maskPreview, setMaskPreview] = useState<string | null>(null);
   const [sourceBase64, setSourceBase64] = useState<string | null>(null);
   const [targetBase64, setTargetBase64] = useState<string | null>(null);
+  const [maskBase64, setMaskBase64] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ComicResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +33,7 @@ export default function FaceSwapComicTestPage() {
 
   const sourceInputRef = useRef<HTMLInputElement>(null);
   const targetInputRef = useRef<HTMLInputElement>(null);
+  const maskInputRef = useRef<HTMLInputElement>(null);
 
   function fileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -71,6 +74,25 @@ export default function FaceSwapComicTestPage() {
     setError(null);
   }
 
+  async function handleMaskChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const preview = URL.createObjectURL(file);
+    setMaskPreview(preview);
+
+    const base64 = await fileToBase64(file);
+    setMaskBase64(base64);
+    setResult(null);
+    setError(null);
+  }
+
+  function clearMask() {
+    setMaskPreview(null);
+    setMaskBase64(null);
+    if (maskInputRef.current) maskInputRef.current.value = "";
+  }
+
   async function runComicSwap() {
     if (!sourceBase64 || !targetBase64) {
       setError("Please upload both images");
@@ -88,6 +110,7 @@ export default function FaceSwapComicTestPage() {
         body: JSON.stringify({
           sourceImage: sourceBase64,
           targetImage: targetBase64,
+          maskImage: maskBase64 || undefined,
           prompt,
           faceStrength,
           styleStrength,
@@ -113,8 +136,10 @@ export default function FaceSwapComicTestPage() {
   function resetAll() {
     setSourcePreview(null);
     setTargetPreview(null);
+    setMaskPreview(null);
     setSourceBase64(null);
     setTargetBase64(null);
+    setMaskBase64(null);
     setResult(null);
     setError(null);
     setPrompt("");
@@ -124,6 +149,7 @@ export default function FaceSwapComicTestPage() {
     setCfg(1.6);
     if (sourceInputRef.current) sourceInputRef.current.value = "";
     if (targetInputRef.current) targetInputRef.current.value = "";
+    if (maskInputRef.current) maskInputRef.current.value = "";
   }
 
   return (
@@ -136,7 +162,7 @@ export default function FaceSwapComicTestPage() {
       </div>
 
       {/* Upload Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Source Face</CardTitle>
@@ -200,6 +226,53 @@ export default function FaceSwapComicTestPage() {
                   fill
                   className="object-cover"
                 />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Mask Image (Optional)</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="mask">Upload mask to control swap region</Label>
+              <input
+                ref={maskInputRef}
+                id="mask"
+                type="file"
+                accept="image/*"
+                onChange={handleMaskChange}
+                className="block w-full text-sm text-muted-foreground
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-primary file:text-primary-foreground
+                  hover:file:bg-primary/90"
+              />
+              <p className="text-xs text-muted-foreground">
+                White areas = swap region, Black areas = keep original
+              </p>
+            </div>
+            {maskPreview && (
+              <div className="space-y-2">
+                <div className="relative aspect-square w-full max-w-[200px] mx-auto rounded-lg overflow-hidden bg-muted">
+                  <Image
+                    src={maskPreview}
+                    alt="Mask image"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearMask}
+                  className="w-full"
+                >
+                  Remove Mask
+                </Button>
               </div>
             )}
           </CardContent>
@@ -356,6 +429,10 @@ export default function FaceSwapComicTestPage() {
           <p>
             <strong>Best for:</strong> Comic books, cartoons, illustrations, and
             stylized artwork
+          </p>
+          <p>
+            <strong>Mask Image:</strong> Optional black/white image to control the swap region.
+            White areas will be swapped, black areas will keep the original.
           </p>
           <p>
             <strong>Face Strength:</strong> Higher values preserve more of the
