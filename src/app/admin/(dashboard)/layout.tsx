@@ -44,6 +44,16 @@ export default async function DashboardLayout({
                   Face-Swap Test
                 </Button>
               </Link>
+              <Link href="/admin/faceswap-comic-test">
+                <Button variant="ghost" size="sm">
+                  Comic Test
+                </Button>
+              </Link>
+              <Link href="/admin/character-generator">
+                <Button variant="ghost" size="sm">
+                  Character Gen
+                </Button>
+              </Link>
             </nav>
           </div>
           <LogoutButton />
